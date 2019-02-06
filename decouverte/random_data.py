@@ -5,8 +5,8 @@ table = []
 with open("training/xs.js", 'w') as f :
     f.write("const xs = [\n");
     for i in range(0, 10000) :
-        x = random.randint(1, 500)
-        y = random.randint(1, 500)
+        x = random.choice(range(1, 500))
+        y = random.choice(range(1, 500))
         table += [[x, y]]
         f.write("[" + str(x) + "," + str(y) + "]," + "\n")
     f.write("];");
@@ -26,8 +26,8 @@ table = []
 with open("testing/xs.js", 'w') as f :
     f.write("const Txs = [\n");
     for i in range(0, 200) :
-        x = random.randint(1, 500)
-        y = random.randint(1, 500)
+        x = random.choice(range(1, 500))
+        y = random.choice(range(1, 500))
         table += [[x, y]]
         f.write("[" + str(x) + "," + str(y) + "]," + "\n")
     f.write("];");
