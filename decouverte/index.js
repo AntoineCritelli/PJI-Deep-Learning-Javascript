@@ -7,6 +7,7 @@ let createModel = () => {
     const inputNBCouches = parseInt(document.getElementById("couches").value);
     const inputNBNeurones = parseInt(document.getElementById("neurones").value);
     const activationType = document.getElementById("activation").value;
+	const inputNBrepetition = parseInt(document.getElementById("repetition").value);
     const consoleText = document.getElementById("console");
     const canvas = document.getElementById("canvas");
     let ctx = canvas.getContext('2d');
@@ -71,7 +72,7 @@ let createModel = () => {
         consoleText.innerText = "Training ...";
 
         const config = {
-            epochs: 10,
+            epochs: inputNBrepetition,
             shuffle: true
         };
         const response = await model.fit(xs, ys, config);
@@ -113,6 +114,12 @@ let createModel = () => {
         consoleText.innerText += "\n";
         consoleText.innerText += "validation : ";
         consoleText.innerText += (good/Txs.length)*100 + "%";
+		
+		tf.dispose(xs);
+		tf.dispose(ys);
+		tf.dispose(Txs);
+		tf.dispose(Tys);
+		tf.dispose(output);
     });
 
 };
