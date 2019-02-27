@@ -11,6 +11,7 @@ let createModel = () => {
     const consoleText = document.getElementById("console");
     const canvas = document.getElementById("canvas");
     let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	// ajout de la couche d'entrée
     model.add(
@@ -86,18 +87,22 @@ let createModel = () => {
 
         let output = model.predict(tf.tensor2d(Txs, [200, 2]));
         const test = output.dataSync();
+        output.print();
+        test.print();
+
+        //console.log(test);
 
         let good = 0;
         let up = 0, down = 0;
         for (let i = 0; i < 200; i++) {
             let flag = false;
-            if (Tys[i][0] == 1 && test[i * 2] > 0.5) {
+            if ((Tys[i][0] == 1 && test[i * 2] > 0.5) || (Tys[i][1] == 1 && test[i*2 +1] >= 0.5)) {
                 good++;
                 flag = true;
             }
 
             // affichage temps reel
-            if (flag) {
+            if (test[i*2 +1] >= 0.5) {
                 ctx.fillStyle = 'rgba(0, 0, 200, 0.1)';
                 ctx.fillRect((up*20)%1400, 10*(1+Math.floor((up*20)/1400)), parseInt(Txs[i][0]), parseInt(Txs[i][1]));
                 up++;
@@ -110,7 +115,7 @@ let createModel = () => {
         consoleText.innerText = "Training complete";
 
         // affichage resultat
-        console.log(good/2 + "%");
+        console.log((good/Txs.length)*100 + "%");
         consoleText.innerText += "\n";
         consoleText.innerText += "validation : ";
         consoleText.innerText += (good/Txs.length)*100 + "%";
