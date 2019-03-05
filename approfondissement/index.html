@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Approfondissement</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.15.3/dist/tf.min.js"></script>
+    <script src="javascript/dataGeneration.js"></script>
+    <script src="javascript/model.js"></script>
+    <script src="javascript/index.js"></script>
+
+</head>
+<body>
+
+    <canvas id="canvas" width="1400" height="850" style="display: none; border: black solid 1px;"></canvas>
+
+    <div>
+        <table style="display: inline-block;">
+            <tr>
+                <td>
+                    <label for="couches">Nombre de couche : </label>
+                </td>
+                <td>
+                    <input type="number" min="0" max="1000" id="couches" value="0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="activation">fonction d'activation : </label>
+                </td>
+                <td>
+                    <select id="activation">
+                        <option value="elu">elu</option>
+                        <option value="selu">selu</option>
+                        <option value="relu">reLU</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Creation Model" id="create"/>
+                </td>
+            </tr>
+        </table>
+        <table style="display: inline-block; margin-left: 2%; vertical-align: top">
+
+            <tr>
+                <td>
+                    <label for="exemple">nombre d'exemple</label>
+                <td>
+                <td>
+                    <input type="number" id="exemple" min="1" max="20000" value="2000" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="repetition">nombre de repetition</label>
+                <td>
+                <td>
+                    <input type="number" id="repetition" min="1" max="200" value="20" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Apprentissage Auto" id="train"/>
+                </td>
+            </tr>
+
+        </table>
+        <table style="display: inline-block; margin-left: 2%; vertical-align: top">
+
+            <tr>
+                <td>
+                    <label for="verification">nombre d'exemple</label>
+                <td>
+                <td>
+                    <input type="number" id="nbverification" min="1" max="20000" value="100" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="verification Auto" id="verification"/>
+                </td>
+            </tr>
+
+        </table>
+
+
+        <div id="console" style="display: inline-block; vertical-align: top;">
+
+        </div>
+    </div>
+
+</body>
+</html>
