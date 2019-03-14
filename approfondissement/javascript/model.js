@@ -58,16 +58,24 @@ let apprentissage = async (model, xs, ys, NBrepetition) => {
 
     // creation de la configiration de l'apprentissage
     const config = {
-        shuffle: true
+        shuffle: true,
+        epochs: NBrepetition,
+        callbacks: {
+            // affichage de la valeur du loss a la fin de chaque itération
+            onEpochEnd: async (epoch, logs) => {
+                console.log(logs.loss);
+            },
+            // affichage du numero d'etape au debut de chaque itération
+            onEpochBegin : async (epoch) => {
+                consol.innerText = `etape ${epoch+1} sur ${NBrepetition}.`;
+            }
+        }
     };
 
     // phase d'apprentissage
-    for (let i=0;i<NBrepetition;i++) {
-        consol.innerText = `etape ${i+1} sur ${NBrepetition}.`;
-        const response = await model.fit(xs, ys, config);
-        console.log(response.history.loss[0]);
-    }
+    const response = await model.fit(xs, ys, config);
 
+    // indication de fin d'apprentissage
     consol.innerText = "apprentissage fini";
 };
 
@@ -79,6 +87,7 @@ let verification = (model, xs, ys) => {
     // recuperation des données
     let response = output.arraySync();
 
+    // recuperation du canvas
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -93,14 +102,14 @@ let verification = (model, xs, ys) => {
             flag = true;
         }
 
-        affichage(dimension[i], i, flag, ctx)
+        affichage(dimension[i], i, flag, ctx, response[i][1]>=0.5)
     }
     console.log(good/response.length*100 + "%");
     return good/response.length*100;
 };
 
 let up=0, down = 0;
-let affichage = (dimension, i, flag, ctx) => {
+let affichage = (dimension, i, flag, ctx, haut) => {
     const width = parseInt(dimension[0]), height = parseInt(dimension[1]);
 
     if (flag)
@@ -115,14 +124,14 @@ let affichage = (dimension, i, flag, ctx) => {
 
 
     let x, y;
-    if (width * height > 40000) {
+    if (haut) {
         x = (up * 20) % 1400;
-        y = 10 * (1 + Math.floor((up * 20) / 1400));
+        y = 10 + 10 * (Math.floor((up * 20) / 1400));
         up++;
     }
     else {
         x = (down * 20) % 1400;
-        y = 425 * (1 + Math.floor((down * 20) / 1400));
+        y = 425 + 10 * (Math.floor((down * 20) / 1400));
         down++;
     }
 

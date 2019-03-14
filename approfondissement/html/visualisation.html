@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualisation</title>
+
+    <script type="text/javascript" src="../javascript/createNetwork.js"></script>
+</head>
+<body>
+    <table style="text-align: center" id="network">
+        <tbody>
+            <tr id="networkController">
+                <td colspan="100" style="text-align: center; border-bottom: black 1px solid;">
+                    <button id="removeLayer">-</button>
+                    <button id="addLayer">+</button>
+                    <span id="numberLayers">2</span>&nbsp;&nbsp;HIDDEN LAYERS
+                </td>
+            </tr>
+            <tr id="layersController">
+                <td id="layer1Controller">
+                    <button class="minusN">-</button>
+                    <button class="plusN">+</button>
+                    <div class="nombreNeurone">2 neurones</div>
+                </td>
+                <td id="layer2Controller">
+                    <button class="minusN">-</button>
+                    <button class="plusN">+</button>
+                    <div class="nombreNeurone">1 neurone</div>
+                </td>
+            </tr>
+            <tr id="neurone1">
+                <td class="actif">
+                    <div>°</div>
+                </td>
+                <td class="actif">
+                    <div>°</div>
+                </td>
+            </tr>
+            <tr id="neurone2">
+                <td class="actif">
+                    <div>°</div>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot id="selectionFonctionActivation">
+            <tr>
+                <td>
+                    <select>
+                        <option value="elu">elu</option>
+                        <option value="leakyReLU">leakyReLU</option>
+                        <option value="prelu">prelu</option>
+                        <option value="reLU">reLU</option>
+                        <option value="softmax">softmax</option>
+                        <option value="thresholdedReLU">thresholdedReLU</option>
+                    </select>
+                </td>
+                <td>
+                <select>
+                    <option value="elu">elu</option>
+                    <option value="leakyReLU">leakyReLU</option>
+                    <option value="prelu">prelu</option>
+                    <option value="reLU">reLU</option>
+                    <option value="softmax">softmax</option>
+                    <option value="thresholdedReLU">thresholdedReLU</option>
+                </select>
+            </td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
