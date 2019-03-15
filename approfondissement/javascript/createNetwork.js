@@ -128,7 +128,7 @@ let addLayers = () => {
     {
         let td = document.createElement("td");
         let select = document.createElement("select");
-        let fonctions = ["elu", "leakyReLU", "prelu", "reLU", "softmax", "thresholdedReLU"];
+        let fonctions = ["elu", "LeakyReLU", "PReLU", "relu", "Softmax", "ThresholdedReLU"];
         fonctions.forEach((e) => {
             let option = document.createElement("option");
             option.value = e;
@@ -136,7 +136,7 @@ let addLayers = () => {
             select.appendChild(option);
         });
         td.appendChild(select);
-        controller.parentNode.parentNode.querySelector("tfoot tr").appendChild(td);
+        document.getElementById("selectionFonctionActivation").querySelector("tr").appendChild(td);
     }
 
 };
@@ -170,6 +170,42 @@ let removeLayers = () => {
         let selectToRemove = tfoot.querySelector("tr td:last-child");
         tfoot.querySelector("tr").removeChild(selectToRemove);
     }
+};
+
+/**
+ * retourne une liste representant les layers contenant le nombre de neurone
+ * ex : [2, 1] = 2 layers avec 2 neurones pour le premier et 1 neurone plus le deuxieme
+ */
+let getLayersTable = () => {
+    let layers = [];
+    let numberLayers = document.getElementById("numberLayers").innerText;
+    for (let i=0;i<numberLayers;i++)
+        layers.push(1);
+
+    let i = 2;
+    do {
+        let neurones = document.getElementById("neurone"+i);
+        Array.from(neurones.querySelectorAll("td")).forEach((e, i) => {
+            if (e.className === "actif")
+                layers[i] += 1;
+        });
+        i++;
+    } while (document.getElementById("neurone"+i) !== null);
+
+    return layers;
+};
+
+/**
+ * retourne la liste des fonctions d'activations des layers
+ * @returns {Array} la liste des fonction d'activation des layers
+ */
+let getActivationTable = () => {
+    let activations = [];
+    Array.from(document.getElementById("selectionFonctionActivation").querySelectorAll("select")).forEach(e => {
+        activations.push(e.value);
+    });
+
+    return activations;
 };
 
 window.addEventListener("load", () => {

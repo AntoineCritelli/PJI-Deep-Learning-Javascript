@@ -1,4 +1,10 @@
-let createModel = (NBCouches, NBNeurones, activationType) => {
+/**
+ *
+ * @param NBNeurones une liste de nombre corresondant au nombre de neurones par couche
+ * @param activationType une liste de fonction d'activation
+ * @returns {*} le model
+ */
+let createModel = (NBNeurones, activationType) => {
 
     // creation du model
     let model =  tf.sequential();
@@ -10,7 +16,7 @@ let createModel = (NBCouches, NBNeurones, activationType) => {
                 {
                     units: NBNeurones[0],
                     inputShape: [2],
-                    activation: activationType
+                    activation: activationType[0]
                 }
             )
         );
@@ -18,13 +24,12 @@ let createModel = (NBCouches, NBNeurones, activationType) => {
 
     // ajout des couches internes
     {
-        for (let i = 1; i < NBCouches; i++) {
+        for (let i = 1; i < NBNeurones.length; i++) {
             model.add(
                 tf.layers.dense(
                     {
                         units: NBNeurones[i],
-                        //inputShape: [NBNeurones[i-1]],
-                        activation: activationType
+                        activation: activationType[i]
                     }
                 )
             );
@@ -37,7 +42,6 @@ let createModel = (NBCouches, NBNeurones, activationType) => {
             tf.layers.dense(
                 {
                     units: 2,
-                    //inputShape: [NBNeurones[NBNeurones.length-1]],
                     activation: 'softmax'
                 }
             )
@@ -51,7 +55,7 @@ let createModel = (NBCouches, NBNeurones, activationType) => {
     return model;
 };
 
-let apprentissage = async (model, xs, ys, NBrepetition) => {
+let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
 
     // recuperation de la console
     const consol = document.getElementById(("console"));
@@ -60,16 +64,19 @@ let apprentissage = async (model, xs, ys, NBrepetition) => {
     const config = {
         shuffle: true,
         epochs: NBrepetition,
+        //validationSplit: 0.1,
         callbacks: {
             // affichage de la valeur du loss a la fin de chaque itération
             onEpochEnd: async (epoch, logs) => {
                 console.log(logs.loss);
+                console.log(logs);
             },
             // affichage du numero d'etape au debut de chaque itération
             onEpochBegin : async (epoch) => {
                 consol.innerText = `etape ${epoch+1} sur ${NBrepetition}.`;
             }
-        }
+        },
+        callbacks: fitCallbacks
     };
 
     // phase d'apprentissage
@@ -91,7 +98,6 @@ let verification = (model, xs, ys) => {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-
     // affichage et calcul du pourcentage de réussite
     let good=0; let dimension = xs.arraySync(), flag;
     for (let i=0;i<response.length;i++)
@@ -105,8 +111,10 @@ let verification = (model, xs, ys) => {
         affichage(dimension[i], i, flag, ctx, response[i][1]>=0.5)
     }
     console.log(good/response.length*100 + "%");
-    return good/response.length*100;
+    return [good/response.length*100, output];
 };
+
+
 
 let up=0, down = 0;
 let affichage = (dimension, i, flag, ctx, haut) => {

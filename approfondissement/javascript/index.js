@@ -16,9 +16,14 @@ window.addEventListener("load", () => {
             inputNBNeurones.push(parseInt(document.getElementById(`neurones${i+1}`).value));
         }
         const activationType = document.getElementById("activation").value;
+        let activationTypeList = [];
+        for (let i=0;i<inputNBNeurones.length;i++)
+        {
+            activationTypeList.push(activationType);
+        }
 
         // creation du model
-        model = createModel(inputNBCouches, inputNBNeurones, activationType);
+        model = createModel(inputNBNeurones, activationTypeList);
     });
 
     // apprentissage du reseau
@@ -48,7 +53,7 @@ window.addEventListener("load", () => {
         const data = genererData(nombreExemple);
 
         // veridication
-        let pourcentage = verification(model, data[0], data[1].arraySync());
+        let pourcentage = verification(model, data[0], data[1].arraySync())[0];
 
         consol.innerText = `taux de réusite : ${pourcentage}%`;
     });

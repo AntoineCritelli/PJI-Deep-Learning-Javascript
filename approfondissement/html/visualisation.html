@@ -4,68 +4,129 @@
     <meta charset="UTF-8">
     <title>Visualisation</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
     <script type="text/javascript" src="../javascript/createNetwork.js"></script>
+    <script type="text/javascript" src="../javascript/visualisation.js"></script>
+    <script type="text/javascript" src="../javascript/model.js"></script>
+    <script type="text/javascript" src="../javascript/dataGeneration.js"></script>
 </head>
 <body>
-    <table style="text-align: center" id="network">
-        <tbody>
-            <tr id="networkController">
-                <td colspan="100" style="text-align: center; border-bottom: black 1px solid;">
-                    <button id="removeLayer">-</button>
-                    <button id="addLayer">+</button>
-                    <span id="numberLayers">2</span>&nbsp;&nbsp;HIDDEN LAYERS
-                </td>
-            </tr>
-            <tr id="layersController">
-                <td id="layer1Controller">
-                    <button class="minusN">-</button>
-                    <button class="plusN">+</button>
-                    <div class="nombreNeurone">2 neurones</div>
-                </td>
-                <td id="layer2Controller">
-                    <button class="minusN">-</button>
-                    <button class="plusN">+</button>
-                    <div class="nombreNeurone">1 neurone</div>
-                </td>
-            </tr>
-            <tr id="neurone1">
-                <td class="actif">
-                    <div>°</div>
-                </td>
-                <td class="actif">
-                    <div>°</div>
-                </td>
-            </tr>
-            <tr id="neurone2">
-                <td class="actif">
-                    <div>°</div>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot id="selectionFonctionActivation">
-            <tr>
-                <td>
+    <div id="CreationNetwork">
+        <table style="text-align: center; display: inline-block;" id="network">
+            <tbody>
+                <tr id="networkController" style="text-align: left;">
+                    <td colspan="100" style="border-bottom: black 1px solid;">
+                        <button id="removeLayer">-</button>
+                        <button id="addLayer">+</button>
+                        <span id="numberLayers">2</span>&nbsp;&nbsp;HIDDEN LAYERS
+                    </td>
+                </tr>
+                <tr id="layersController">
+                    <td id="layer1Controller">
+                        <button class="minusN">-</button>
+                        <button class="plusN">+</button>
+                        <div class="nombreNeurone">2 neurones</div>
+                    </td>
+                    <td id="layer2Controller">
+                        <button class="minusN">-</button>
+                        <button class="plusN">+</button>
+                        <div class="nombreNeurone">1 neurone</div>
+                    </td>
+                </tr>
+                <tr id="neurone1">
+                    <td class="actif">
+                        <div>°</div>
+                    </td>
+                    <td class="actif">
+                        <div>°</div>
+                    </td>
+                </tr>
+                <tr id="neurone2">
+                    <td class="actif">
+                        <div>°</div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot id="selectionFonctionActivation">
+                <tr>
+                    <td>
+                        <select>
+                            <option value="elu">elu</option>
+                            <option value="LeakyReLU">LeakyReLU</option>
+                            <option value="PReLU">prelu</option>
+                            <option value="relu">reLU</option>
+                            <option value="Softmax">softmax</option>
+                            <option value="ThresholdedReLU">thresholdedReLU</option>
+                        </select>
+                    </td>
+                    <td>
                     <select>
                         <option value="elu">elu</option>
-                        <option value="leakyReLU">leakyReLU</option>
-                        <option value="prelu">prelu</option>
-                        <option value="reLU">reLU</option>
-                        <option value="softmax">softmax</option>
-                        <option value="thresholdedReLU">thresholdedReLU</option>
+                        <option value="LeakyReLU">LeakyReLU</option>
+                        <option value="PReLU">prelu</option>
+                        <option value="relu">reLU</option>
+                        <option value="Softmax">softmax</option>
+                        <option value="ThresholdedReLU">thresholdedReLU</option>
                     </select>
                 </td>
+                </tr>
+            </tfoot>
+        </table>
+        <button id="createModel" style="vertical-align: top;">Creation Model</button>
+    </div>
+    <div id="apprentissage" style="display: none;">
+        <table>
+
+            <tr>
                 <td>
-                <select>
-                    <option value="elu">elu</option>
-                    <option value="leakyReLU">leakyReLU</option>
-                    <option value="prelu">prelu</option>
-                    <option value="reLU">reLU</option>
-                    <option value="softmax">softmax</option>
-                    <option value="thresholdedReLU">thresholdedReLU</option>
-                </select>
-            </td>
+                    <label for="dataSize">nombre d'exemple</label>
+                <td>
+                <td>
+                    <input type="number" id="dataSize" min="1" max="20000" value="2000" />
+                </td>
             </tr>
-        </tfoot>
-    </table>
+            <tr>
+                <td>
+                    <label for="repetition">nombre de repetition</label>
+                <td>
+                <td>
+                    <input type="number" id="repetition" min="1" max="200" value="20" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Apprentissage Auto" id="train"/>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <div id="console" style="display: none;"></div>
+    <div id="console2"></div>
+    <div id="verification" style="display: none;">
+        <table>
+            <tr>
+                <td>
+                    <label for="verification">nombre d'exemple</label>
+                <td>
+                <td>
+                    <input type="number" id="nbverification" min="1" max="20000" value="100" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="verification Auto" id="verificationButton"/>
+                </td>
+                <td id="resultatVerification">
+
+                </td>
+            </tr>
+        </table>
+
+        <canvas id="canvas" width="1400" height="850" style="border: black solid 1px;"></canvas>
+
+    </div>
+    <div id="console3"></div>
 </body>
 </html>
