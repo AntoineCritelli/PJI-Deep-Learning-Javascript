@@ -15,7 +15,7 @@ let createModel = (NBNeurones, activationType) => {
             tf.layers.dense(
                 {
                     units: NBNeurones[0],
-                    inputShape: [2],
+                    inputShape: [3],
                     activation: activationType[0]
                 }
             )
@@ -99,7 +99,7 @@ let verification = (model, xs, ys) => {
     const ctx = canvas.getContext("2d");
 
     // affichage et calcul du pourcentage de réussite
-    let good=0; let dimension = xs.arraySync(), flag;
+    let good=0, flag;
     for (let i=0;i<response.length;i++)
     {
         flag = false;
@@ -108,7 +108,7 @@ let verification = (model, xs, ys) => {
             flag = true;
         }
 
-        affichage(dimension[i], i, flag, ctx, response[i][1]>=0.5)
+        affichage(i, flag, ctx, response[i][1]>=0.5)
     }
     console.log(good/response.length*100 + "%");
     return [good/response.length*100, output];
@@ -117,8 +117,8 @@ let verification = (model, xs, ys) => {
 
 
 let up=0, down = 0;
-let affichage = (dimension, i, flag, ctx, haut) => {
-    const width = parseInt(dimension[0]), height = parseInt(dimension[1]);
+let affichage = (i, flag, ctx, haut) => {
+    const width = 200, height = 200;
 
     if (flag)
         ctx.fillStyle = 'rgba(0, 200, 0, 1)';

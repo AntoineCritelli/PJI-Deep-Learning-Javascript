@@ -3,14 +3,31 @@ let genererData = nb => {
 
    for (let i=0;i<nb;i++)
    {
-       let hauteur = Math.floor(Math.random() * 400-1)+1;
-       let largeur = Math.floor(Math.random() * 400-1)+1;
+       let nbLignes = randint(500);
+       let nbAttributes = randint(20);
+       let nbMethodes = randint(30);
 
-       let resultat = (hauteur*largeur<40000)?[1, 0]:[0, 1];
+       let normalized = normalize(nbLignes, 1, 500)
+           + normalize(nbAttributes, 1, 20)
+           + normalize(nbMethodes, 1, 30);
 
-       xs.push([largeur, hauteur]);
+       normalized = normalized/3;
+
+       let resultat;
+       if (normalized>=0.5)
+           resultat = [0, 1];
+       else
+           resultat = [1, 0];
+
+       xs.push([nbLignes, nbAttributes, nbMethodes]);
        ys.push(resultat);
    }
 
    return [tf.tensor2d(xs), tf.tensor2d(ys)];
 };
+
+
+let randint = (max) => Math.floor(Math.random() * max-1)+1;
+
+
+let normalize = (val, max, min) => (val - min) / (max - min);

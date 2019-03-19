@@ -50,11 +50,16 @@ window.addEventListener("load", () => {
             ys.argMax([-1]),
             prediction.argMax([-1])
         );
+
         // affichage de la matrice
         const container = document.getElementById("console3");
         tfvis.render.confusionMatrix(container, {
             values: confusionMatrix,
             tickLabels: ["Bas", "Haut"]
         });
+
+        tf.dispose(xs);
+        tf.dispose(ys);
+        tf.dispose(prediction);
     })
 });
