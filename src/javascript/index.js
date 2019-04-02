@@ -15,6 +15,7 @@ window.addEventListener("load", () => {
 
         // affichage des options d'apprentissage
         document.getElementById("apprentissage").style.display = "block";
+        document.getElementById("saveModel").style.display = "inline-block";
     });
 
     document.getElementById("train").addEventListener("click", () => {
@@ -68,4 +69,13 @@ window.addEventListener("load", () => {
         tf.dispose(prediction);
         tf.dispose(confusionMatrix);
     })
+
+    document.getElementById("saveModel").addEventListener("click", async () => {
+        let name = prompt("nom du model :", "my-model");
+        await model.save("downloads://"+name);
+    });
+
+    document.getElementById("loadModel").addEventListener("click", () => {
+        // TODO chargement d'un model existant
+    });
 });
