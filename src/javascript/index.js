@@ -48,18 +48,24 @@ window.addEventListener("load", () => {
         // calcule de la matrice de confusion
         const confusionMatrix = await tfvis.metrics.confusionMatrix(
             ys.argMax([-1]),
-            prediction.argMax([-1])
+            prediction.argMax([-1]),
+            4
         );
+
+        console.log(ys.arraySync()[0]);
+        console.log(prediction.arraySync()[0]);
 
         // affichage de la matrice
         const container = document.getElementById("console3");
         tfvis.render.confusionMatrix(container, {
             values: confusionMatrix,
-            tickLabels: ["Bas", "Haut"]
+            tickLabels: ["Haut-gauche", "Haut-droite", "Bas-gauche", "Bas-droite"]
         });
+
 
         tf.dispose(xs);
         tf.dispose(ys);
         tf.dispose(prediction);
+        tf.dispose(confusionMatrix);
     })
 });

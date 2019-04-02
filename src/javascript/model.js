@@ -15,7 +15,7 @@ let createModel = (NBNeurones, activationType) => {
             tf.layers.dense(
                 {
                     units: NBNeurones[0],
-                    inputShape: [3],
+                    inputShape: [5],
                     activation: activationType[0]
                 }
             )
@@ -41,7 +41,7 @@ let createModel = (NBNeurones, activationType) => {
         model.add(
             tf.layers.dense(
                 {
-                    units: 2,
+                    units: 4,
                     activation: 'softmax'
                 }
             )
@@ -103,12 +103,22 @@ let verification = (model, xs, ys) => {
     for (let i=0;i<response.length;i++)
     {
         flag = false;
-        if (response[i][0] > 0.5 && ys[i][0] == 1 || response[i][1] >= 0.5 && ys[i][1] == 1) {
+/*        if ((response[i][0] > 0.5 && ys[i][0] == 1) && (response[i][2] > 0.5 && ys[i][2] == 1)
+            || (response[i][1] >= 0.5 && ys[i][1] == 1) && (response[i][3] >= 0.5 && ys[i][3] == 1)) {
             good++;
             flag = true;
         }
 
-        affichage(i, flag, ctx, response[i][1]>=0.5)
+        */
+        let indexMax = response[i].indexOf(Math.max(...response[i]));
+        if (ys[i][indexMax] === 1)
+        {
+            good++;
+            flag = true;
+        }
+        affichage(flag, ctx,
+            indexMax === 0 || indexMax === 1,
+            indexMax === 0 || indexMax === 2)
     }
     console.log(good/response.length*100 + "%");
     return [good/response.length*100, output];
@@ -116,8 +126,8 @@ let verification = (model, xs, ys) => {
 
 
 
-let up=0, down = 0;
-let affichage = (i, flag, ctx, haut) => {
+let up=0, down = 0, right = 0, left = 0;
+let affichage = (flag, ctx, haut, gauche) => {
     const width = 200, height = 200;
 
     if (flag)
@@ -133,14 +143,22 @@ let affichage = (i, flag, ctx, haut) => {
 
     let x, y;
     if (haut) {
-        x = (up * 20) % 1400;
         y = 10 + 10 * (Math.floor((up * 20) / 1400));
         up++;
     }
     else {
-        x = (down * 20) % 1400;
         y = 425 + 10 * (Math.floor((down * 20) / 1400));
         down++;
+    }
+    if (gauche)
+    {
+        x = (left * 20) % 600;
+        left++;
+    }
+    else
+    {
+        x = 650 + (right * 20) % 600;
+        right++;
     }
 
     ctx.rect(x, y, width, height);
