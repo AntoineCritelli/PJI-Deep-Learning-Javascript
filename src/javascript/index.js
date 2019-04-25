@@ -1,7 +1,9 @@
-let model;
+let model, dataUsed;
 
 
 window.addEventListener("load", () => {
+
+    // crée le model
     document.getElementById("createModel").addEventListener("click", () => {
         if (model !== null)
             tf.dispose(model);
@@ -18,11 +20,13 @@ window.addEventListener("load", () => {
         document.getElementById("saveModel").style.display = "inline-block";
     });
 
+    // fait l'apprentissage du model
     document.getElementById("train").addEventListener("click", () => {
         const dataSize = document.getElementById("dataSize").value;
         const numRepetition = document.getElementById("repetition").value;
 
         const [xs, ys] = genererData(dataSize);
+        dataUsed = [xs, ys];
 
         // creation de la fonction pour le graphique
         const metrics = ['loss', 'val_loss'];
@@ -37,6 +41,7 @@ window.addEventListener("load", () => {
         apprentissage(model, xs, ys, numRepetition, callbacks);
     });
 
+    // fait la verification du model
     document.getElementById("verificationButton").addEventListener("click", async () => {
         const nombreExemple = document.getElementById("nbverification").value;
 
@@ -70,12 +75,25 @@ window.addEventListener("load", () => {
         tf.dispose(confusionMatrix);
     })
 
+    // sauvegarde le model
     document.getElementById("saveModel").addEventListener("click", async () => {
         let name = prompt("nom du model :", "my-model");
-        await model.save("downloads://"+name);
+
+        if (name)
+            await model.save("downloads://"+name);
     });
 
-    document.getElementById("loadModel").addEventListener("click", () => {
-        // TODO chargement d'un model existant
+    // charge un model
+    // TODO resoudre le probleme de chargement de model
+    document.getElementById("loadModel").addEventListener("click", async () => {
+        model = await tf.loadLayersModel('downloads://my-model').then(r => console.log(r));
+
+        //document.getElementById("loadModelPosition").click();
+    });
+
+    document.getElementById("loadModelPosition").addEventListener("change", async () => {
+        let inputFile = document.getElementById("loadModelPosition");
+
+        model = await tf.loadLayersModel(inputFile.value).then(r => console.log(r));
     });
 });

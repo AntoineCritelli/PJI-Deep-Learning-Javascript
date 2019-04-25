@@ -68,8 +68,8 @@ let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
         callbacks: {
             // affichage de la valeur du loss a la fin de chaque itération
             onEpochEnd: async (epoch, logs) => {
-                console.log(logs.loss);
-                console.log(logs);
+                //console.log(logs.loss);
+                //console.log(logs);
             },
             // affichage du numero d'etape au debut de chaque itération
             onEpochBegin : async (epoch) => {
@@ -83,7 +83,8 @@ let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
     const response = await model.fit(xs, ys, config);
 
     // indication de fin d'apprentissage
-    consol.innerText = "apprentissage fini";
+    if (consol)
+        consol.innerText = "apprentissage fini";
 };
 
 let verification = (model, xs, ys) => {
@@ -120,7 +121,7 @@ let verification = (model, xs, ys) => {
             indexMax === 0 || indexMax === 1,
             indexMax === 0 || indexMax === 2)
     }
-    console.log(good/response.length*100 + "%");
+    //console.log(good/response.length*100 + "%");
     return [good/response.length*100, output];
 };
 
