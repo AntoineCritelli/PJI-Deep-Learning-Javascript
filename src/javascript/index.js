@@ -96,14 +96,34 @@ window.addEventListener("load", () => {
     // charge un model
     // TODO resoudre le probleme de chargement de model
     document.getElementById("loadModel").addEventListener("click", async () => {
-        model = await tf.loadLayersModel('downloads://my-model').then(r => console.log(r));
-
-        //document.getElementById("loadModelPosition").click();
+       document.getElementById("loadModelPosition").click();
     });
 
     document.getElementById("loadModelPosition").addEventListener("change", async () => {
+        document.getElementById("loadModelWeights").click();
+    });
+    document.getElementById("loadModelWeights").addEventListener("change", async () => {
         let inputFile = document.getElementById("loadModelPosition");
+        let weightsFile = document.getElementById("loadModelWeights");
 
-        model = await tf.loadLayersModel(inputFile.value).then(r => console.log(r));
+        model = await tf.loadLayersModel(
+            tf.io.browserFiles([inputFile.files[0], weightsFile.files[0]])
+        );
+
+        const sgdOpt = tf.train.sgd(0.1); // 0.1 : learning rate
+        model.compile({loss: 'meanSquaredError', optimizer: sgdOpt});
+
+        // affichage des options d'apprentissage
+        document.getElementById("apprentissage").style.display = "block";
+        document.getElementById("saveModel").style.display = "inline-block";
+
+        // clear du canvas
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // clear du graph
+        document.getElementById("console2").innerHTML = '';
     });
 });
