@@ -18,10 +18,20 @@ window.addEventListener("load", () => {
         // affichage des options d'apprentissage
         document.getElementById("apprentissage").style.display = "block";
         document.getElementById("saveModel").style.display = "inline-block";
+
+        // clear du canvas
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // clear du graph
+        document.getElementById("console2").innerHTML = '';
     });
 
     // fait l'apprentissage du model
     document.getElementById("train").addEventListener("click", () => {
+
         const dataSize = document.getElementById("dataSize").value;
         const numRepetition = document.getElementById("repetition").value;
 
@@ -73,7 +83,7 @@ window.addEventListener("load", () => {
         tf.dispose(ys);
         tf.dispose(prediction);
         tf.dispose(confusionMatrix);
-    })
+    });
 
     // sauvegarde le model
     document.getElementById("saveModel").addEventListener("click", async () => {

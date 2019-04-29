@@ -57,34 +57,16 @@ let createModel = (NBNeurones, activationType) => {
 
 let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
 
-    // recuperation de la console
-    const consol = document.getElementById(("console"));
-
     // creation de la configiration de l'apprentissage
     const config = {
         shuffle: true,
         epochs: NBrepetition,
-        //validationSplit: 0.1,
-        callbacks: {
-            // affichage de la valeur du loss a la fin de chaque itération
-            onEpochEnd: async (epoch, logs) => {
-                //console.log(logs.loss);
-                //console.log(logs);
-            },
-            // affichage du numero d'etape au debut de chaque itération
-            onEpochBegin : async (epoch) => {
-                consol.innerText = `etape ${epoch+1} sur ${NBrepetition}.`;
-            }
-        },
         callbacks: fitCallbacks
+        //validationSplit: 0.1,
     };
 
     // phase d'apprentissage
     const response = await model.fit(xs, ys, config);
-
-    // indication de fin d'apprentissage
-    if (consol)
-        consol.innerText = "apprentissage fini";
 };
 
 let verification = (model, xs, ys) => {
