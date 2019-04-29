@@ -41,6 +41,17 @@ window.addEventListener("load", () => {
 
             tr.appendChild(td2);
             tr.appendChild(td3);
+
+            let td4 = document.createElement("td");
+            let button = document.createElement("button");
+            button.className = "save";
+            button.addEventListener("click", async (t) => {await saveModel(t)});
+            button.innerText = "sauvegarder";
+            td4.appendChild(button);
+
+            tr.appendChild(td4);
+
+
             document.getElementById("models").appendChild(tr);
         }
 
@@ -100,4 +111,15 @@ let title = (layers, activation) => {
         res += "couche " + (i+1) + " : " + elt + " neurones (" + activation[i] + ")\n";
     });
     return res;
+};
+
+let saveModel = async e => {
+    let name = prompt("nom du model :", "my-model");
+
+    if (name) {
+        let tr = e.target.parentNode.parentNode;
+        let index = Array.from(document.getElementsByClassName("model")).indexOf(tr);
+
+        await model[index].save("downloads://" + name);
+    }
 };
