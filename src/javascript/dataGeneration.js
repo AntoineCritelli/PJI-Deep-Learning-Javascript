@@ -1,33 +1,38 @@
+const MAX_NB_LIGNES = 500; // nombre max de ligne d'une classe
+const MAX_NB_ATTRIBUTES = 20; // nombre max d'attributs d'une classe
+const MAX_NB_METHODES = 30; // nombre max de methodes d'une classe
+const MAX_NB_JOUR_CREATION = 30; // nombre max de jour depuis la creation d'une classe
+
 let genererData = nb => {
    let xs = [], ys = [];
 
    for (let i=0;i<nb;i++)
    {
-       let nbLignes = randint(500);
-       let nbAttributes = randint(20);
-       let nbMethodes = randint(30);
+       let nbLignes = randint(MAX_NB_LIGNES);
+       let nbAttributes = randint(MAX_NB_ATTRIBUTES);
+       let nbMethodes = randint(MAX_NB_METHODES);
 
-       let creation = randint(30);
+       let creation = randint(MAX_NB_JOUR_CREATION);
        let lastview = randint(creation);
 
-       let normalized = normalize(nbLignes, 1, 500)
+       let normalizedClasse = normalize(nbLignes, 1, 500)
            + normalize(nbAttributes, 1, 20)
            + normalize(nbMethodes, 1, 30);
 
-       let normalizeddate = normalize(creation, 1, 30)
+       let normalizedDate = normalize(creation, 1, 30)
            + normalize(lastview, 1, 30);
 
-       normalized /= 3;
-       normalizeddate /= 3;
+       normalizedClasse /= 3;
+       normalizedDate /= 3;
 
        let resultat;
-       if (normalized>=0.5)
-           if (normalizeddate >= 0.5)
+       if (normalizedClasse>=0.5)
+           if (normalizedDate >= 0.5)
                resultat = [0, 1, 0, 0]; // en haut a droite
            else
                resultat = [1, 0, 0, 0]; // en haut a gauche
        else
-           if (normalizeddate >= 0.5)
+           if (normalizedDate >= 0.5)
                resultat = [0, 0, 0, 1]; // en bas a droite
            else
                resultat = [0, 0, 1, 0]; // en bas a gauche
@@ -43,4 +48,4 @@ let genererData = nb => {
 let randint = (max) => Math.floor(Math.random() * max-1)+1;
 
 
-let normalize = (val, max, min) => (val - min) / (max - min);
+let normalize = (val, min, max) => (val - min) / (max - min);

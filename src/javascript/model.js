@@ -1,3 +1,8 @@
+const NB_OUTPUT = 4; // nombre de neurones de sortie du réseau
+const NB_INPUT = 5; // nombre d'entré du réseau
+const LEARNING_RATE = 0.1; // learning rage du réseau
+const LOSS_FUNCTION = 'meanSquaredError'; // fonction pour le calcul du loss du réseau
+
 /**
  *
  * @param NBNeurones une liste de nombre corresondant au nombre de neurones par couche
@@ -15,7 +20,7 @@ let createModel = (NBNeurones, activationType) => {
             tf.layers.dense(
                 {
                     units: NBNeurones[0],
-                    inputShape: [5],
+                    inputShape: [NB_INPUT],
                     activation: activationType[0]
                 }
             )
@@ -41,7 +46,7 @@ let createModel = (NBNeurones, activationType) => {
         model.add(
             tf.layers.dense(
                 {
-                    units: 4,
+                    units: NB_OUTPUT,
                     activation: 'softmax'
                 }
             )
@@ -49,8 +54,8 @@ let createModel = (NBNeurones, activationType) => {
     }
 
     // compilation
-    const sgdOpt = tf.train.sgd(0.1); // 0.1 : learning rate
-    model.compile({loss: 'meanSquaredError', optimizer: sgdOpt});
+    const sgdOpt = tf.train.sgd(LEARNING_RATE); // 0.1 : learning rate
+    model.compile({loss: LOSS_FUNCTION, optimizer: sgdOpt});
 
     return model;
 };
@@ -62,7 +67,6 @@ let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
         shuffle: true,
         epochs: NBrepetition,
         callbacks: fitCallbacks
-        //validationSplit: 0.1,
     };
 
     // phase d'apprentissage
@@ -86,19 +90,17 @@ let verification = (model, xs, ys) => {
     for (let i=0;i<response.length;i++)
     {
         flag = false;
-/*        if ((response[i][0] > 0.5 && ys[i][0] == 1) && (response[i][2] > 0.5 && ys[i][2] == 1)
-            || (response[i][1] >= 0.5 && ys[i][1] == 1) && (response[i][3] >= 0.5 && ys[i][3] == 1)) {
-            good++;
-            flag = true;
-        }
 
-        */
+        // recuperation de l'indice du resultat maximum
         let indexMax = response[i].indexOf(Math.max(...response[i]));
+
+        // verification du résultat
         if (ys[i][indexMax] === 1)
         {
             good++;
             flag = true;
         }
+
         affichage(flag, ctx,
             indexMax === 0 || indexMax === 1,
             indexMax === 0 || indexMax === 2)

@@ -93,15 +93,17 @@ window.addEventListener("load", () => {
             await model.save("downloads://"+name);
     });
 
-    // charge un model
-    // TODO resoudre le probleme de chargement de model
+    // click sur loadModel ouvre l'explorateur de fichier pour le modele
     document.getElementById("loadModel").addEventListener("click", async () => {
        document.getElementById("loadModelPosition").click();
     });
 
+    // quand le modele est chargé, ouvre l'explorateur de fichier pour les poids du réseau
     document.getElementById("loadModelPosition").addEventListener("change", async () => {
         document.getElementById("loadModelWeights").click();
     });
+
+    // quand les deux fichier sont chargé, charge et compile le modèle
     document.getElementById("loadModelWeights").addEventListener("change", async () => {
         let inputFile = document.getElementById("loadModelPosition");
         let weightsFile = document.getElementById("loadModelWeights");
