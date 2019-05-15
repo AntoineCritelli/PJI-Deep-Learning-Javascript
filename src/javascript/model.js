@@ -1,6 +1,6 @@
 const NB_OUTPUT = 4; // nombre de neurones de sortie du réseau
 const NB_INPUT = 5; // nombre d'entré du réseau
-const LEARNING_RATE = 0.1; // learning rage du réseau
+const LEARNING_RATE = 0.1; // learning rate du réseau
 const LOSS_FUNCTION = 'meanSquaredError'; // fonction pour le calcul du loss du réseau
 
 /**

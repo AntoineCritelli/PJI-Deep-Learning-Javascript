@@ -25,6 +25,11 @@ let genererData = nb => {
        normalizedClasse /= 3;
        normalizedDate /= 3;
 
+       /**
+        * le résultat est un tableau de quatre valeurs, toutes à zero sauf une qui est à un
+        * la position du 1 détermine le positionnement de la classe sur l'interface
+        *
+        */
        let resultat;
        if (normalizedClasse>=0.5)
            if (normalizedDate >= 0.5)
