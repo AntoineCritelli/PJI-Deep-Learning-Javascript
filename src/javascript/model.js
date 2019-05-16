@@ -60,6 +60,15 @@ let createModel = (NBNeurones, activationType) => {
     return model;
 };
 
+/**
+ *
+ * @param model le modèle a entrainer
+ * @param xs les données d'entrées pour l'entrainement
+ * @param ys les données de sorties pour l'entrainement
+ * @param NBrepetition le nombre de répetition d'apprentissage
+ * @param fitCallbacks les fonction appellé automatiquement lors des phase d'apprentissage
+ * @returns {Promise<void>}
+ */
 let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
 
     // creation de la configiration de l'apprentissage
@@ -73,6 +82,13 @@ let apprentissage = async (model, xs, ys, NBrepetition, fitCallbacks) => {
     const response = await model.fit(xs, ys, config);
 };
 
+/**
+ *
+ * @param model le modèle a vérifier
+ * @param xs les données d'entrées pour la verification
+ * @param ys les données de sortie pour la verification
+ * @returns {*[]} retourn un tableau contenant le taux de réussite du réseau aunsi que les prédiction du réseau
+ */
 let verification = (model, xs, ys) => {
 
     // prediction
