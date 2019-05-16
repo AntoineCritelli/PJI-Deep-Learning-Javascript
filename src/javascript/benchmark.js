@@ -1,5 +1,5 @@
 let model = [], dataUsed;
-
+let passed_iteration = 0;
 
 window.addEventListener("load", () => {
 
@@ -49,7 +49,12 @@ window.addEventListener("load", () => {
             button.innerText = "sauvegarder";
             td4.appendChild(button);
 
+            let td5 = document.createElement("td");
+            td5.id = "console_loss" + document.getElementById("models").querySelectorAll("tr").length;
+            td5.style.width = "100 px";
+
             tr.appendChild(td4);
+            tr.appendChild(td5);
 
 
             document.getElementById("models").appendChild(tr);
@@ -67,15 +72,25 @@ window.addEventListener("load", () => {
 
         model.forEach((elt, i) => {
             // creation de la fonction pour le graphique
-            let callbacks = {
-                onEpochEnd: (epoch, log) => {
-                    let loss = log.loss.toFixed(4);
+            const metrics = ['loss', 'val_loss'];
+            const graphe_function = tfvis.show.fitCallbacks(document.getElementById("console_loss"+(i+1)), metrics).onEpochEnd;
+            const callbacks = {onEpochEnd: (epoch, log) => {
+                graphe_function(epoch, log);
 
-                    document.getElementById("models")
-                        .querySelectorAll("tr")[i+1]
-                        .getElementsByClassName("lossValue")[0].innerText = loss+'%';
+                let loss = log.loss.toFixed(4);
+
+                document.getElementById("console").innerText = `itération restante : ${(model.length*numRepetition)-(++passed_iteration)}/${model.length*numRepetition}`;
+
+                if (passed_iteration===model.length*numRepetition) {
+                    document.getElementById("console").innerText = "entrainement terminé";
+                    passed_iteration = 0;
                 }
-            };
+
+                document.getElementById("models")
+                    .querySelectorAll("tr")[i+1]
+                    .getElementsByClassName("lossValue")[0].innerText = loss+'%';
+                }};
+            callbacks.onBatchEnd = null;
 
             // lancement de la fonction d'apprentissage
             apprentissage(elt, xs, ys, numRepetition, callbacks);
